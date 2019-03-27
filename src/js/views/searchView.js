@@ -11,6 +11,7 @@ export const clearInputField = () => {
 // method to clear results
 export const clearResults = () => { 
     DOMelements.searchResultList.innerHTML = "";
+    DOMelements.resultsPages.innerHTML = "";
 }
 
 // method to cut recipe title
@@ -49,9 +50,43 @@ const renderRecipe = (recipe) => {
                 </li>
     `;
     DOMelements.searchResultList.insertAdjacentHTML('beforeend', recipeMarkup);
-} 
+};
+
+// method to create page buttons
+const createButton = (page, type) => `
+                <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1 }>
+                <span>Page ${type === 'prev' ? page - 1 : page + 1 }</span>
+                    <svg class="search__icon">
+                        <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+                    </svg>                 
+                </button>
+`;
+
+
+// method to render page buttons
+const renderButtons = (page, numResults, resultsPerPage) => { 
+    const pages = Math.ceil(numResults / resultsPerPage);
+    let button;
+
+    if(page === 1 && pages > 1) { 
+        button = createButton(page, 'next');
+    } else if(page < pages) { 
+        button = `${createButton(page, 'prev')}${createButton(page, 'next')}`;
+
+    } else if(page === pages && pages > 1) { 
+        button = createButton(page, 'prev');
+    }
+
+    DOMelements.resultsPages.insertAdjacentHTML('afterbegin', button);
+};
 
 // method to display all results
-export const renderResults = recipes => {
-    recipes.forEach(elem => renderRecipe(elem));
+export const renderResults = (recipes, page = 1, resPerPage = 10 ) => {
+    // Example: page - 1 : 
+    // start index: (1 - 1) * 10 = 0
+    // end index: 1 * 10 = 10
+    const startIndex = (page - 1) * resPerPage;
+    const endIndex = page * resPerPage;
+    recipes.slice(startIndex, endIndex).forEach(elem => renderRecipe(elem));
+    renderButtons(page, recipes.length, resPerPage);
 }
