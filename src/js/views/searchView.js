@@ -14,6 +14,13 @@ export const clearResults = () => {
     DOMelements.resultsPages.innerHTML = "";
 }
 
+// method to highlight current element
+export const highlight = id => { 
+    const highlightLinks = Array.from(document.querySelectorAll(".results__link"));
+    highlightLinks.forEach(item => item.classList.remove("results__link--active"));
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+}
+
 // method to cut recipe title
 const limitTitle = (title, bound = 17) => { 
     console.log(title);

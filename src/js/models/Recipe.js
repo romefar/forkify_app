@@ -15,7 +15,7 @@ export default class {
             this.ingredients = result.data.recipe.ingredients;
             console.log()
         } catch (error) {
-            console.log(error);
+            console.error(error);
             alert(error);
         }
     }
@@ -37,6 +37,7 @@ export default class {
 
         const unitFullName = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
         const unitShortName = ['tbsp', 'tbsp', 'oz', 'oz','tsp', 'tsp', 'cup', 'pound'];
+        const units = [...unitShortName, 'kg', 'g'];
 
 
         const newIngredients = this.ingredients.map(item => { 
@@ -51,7 +52,7 @@ export default class {
 
             // 3. Parse ingredients into count, unit and name
             const arr = ingredient.split(' ');
-            const unitIndex = arr.findIndex(item => unitShortName.includes(item))
+            const unitIndex = arr.findIndex(item => units.includes(item)) // changed: from ShortName to units 
 
             let obj;
             if(unitIndex > -1) {
@@ -62,12 +63,15 @@ export default class {
                 let count;
                 
                 if(arrCount.length === 1) {
-                    count = Math.ceil(eval(arr[0].replace('-', '+')));
+                    count = eval(arr[0].replace('-', '+'));
                 } else { 
                     // eval()?????????? 
-                    count = Math.ceil(eval(arr.slice(0, unitIndex).join('+')));
+                    count = eval(arr.slice(0, unitIndex).join('+'));
                 }
-                
+                // TODO: CHANGE LATER count = 1.333333333333
+                if(count.toString().length > 2) { 
+                    count = parseFloat(count.toFixed(2));
+                }
                 obj = { 
                     count, 
                     unit: arr[unitIndex],
@@ -90,5 +94,14 @@ export default class {
             return obj;
         });
         this.ingredients = newIngredients;
+    }
+
+    updateServings(type) {
+        // update servings count
+        const newServings = type === "dec" ? this.servings - 1 : this.servings + 1;
+
+        // calculate servings count based on ingredients
+        this.ingredients.forEach(item => item.count *= (newServings / this.servings));
+
     }
 }
