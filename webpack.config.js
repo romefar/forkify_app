@@ -18,7 +18,7 @@ module.exports = {
     ],
     output: { 
         path: path.resolve(__dirname, 'dist'), // we need to specify an absolute path!!!
-        filename: 'js/bundle.js'                     // __dirname return a cuurent absolute path to our project
+        filename: 'js/bundle.js'                     // __dirname return a current absolute path to our project
     },
     //mode: "development" // we can use mode in our npm script to configure our build
     devServer: { 

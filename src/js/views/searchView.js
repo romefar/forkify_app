@@ -18,12 +18,12 @@ export const clearResults = () => {
 export const highlight = id => { 
     const highlightLinks = Array.from(document.querySelectorAll(".results__link"));
     highlightLinks.forEach(item => item.classList.remove("results__link--active"));
-    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href="#${id}"]`).classList.add('results__link--active');
 }
 
 // method to cut recipe title
-const limitTitle = (title, bound = 17) => { 
-    console.log(title);
+export const limitTitle = (title, bound = 17) => { 
+    //console.log(title);
     const res = [];
     if(title.length > bound) { 
         title.slice(0).split(' ').reduce((accum, item, i, arr) => { 
@@ -34,7 +34,7 @@ const limitTitle = (title, bound = 17) => {
             // tip to exit from reduce method
             arr.splice(1);          
         }, 0);
-        console.log(title);
+        //console.log(title);
         // return new title
         return `${res.join(' ')} ...`;
     }

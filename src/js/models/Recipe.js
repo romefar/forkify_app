@@ -101,7 +101,9 @@ export default class {
         const newServings = type === "dec" ? this.servings - 1 : this.servings + 1;
 
         // calculate servings count based on ingredients
-        this.ingredients.forEach(item => item.count *= (newServings / this.servings));
-
+        this.ingredients.forEach(item => {
+            item.count *= (newServings / this.servings)
+        });
+        this.servings = newServings;
     }
 }

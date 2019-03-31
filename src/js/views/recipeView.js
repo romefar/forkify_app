@@ -1,18 +1,19 @@
 import { DOMelements } from './base';
 import { Fraction } from 'fractional';
 
-const formantCount = count => {
+const formatCount = count => {
     if(count) { 
-        const [int, dec] = count.toString().split(".").map(item => parseInt(item));
+        const newCount = Math.round(count * 10000) / 10000;
+        const [int, dec] = newCount.toString().split(".").map(item => parseInt(item));
         
-        if(!dec) return count;
+        if(!dec) return newCount;
 
         if(int === 0 ) { 
-            const frac = new Fraction(count);
+            const frac = new Fraction(newCount);
             // console.log(`TEST: ${frac.numerator}/${frac.denominator}`);
             return `${frac.numerator}/${frac.denominator}`;
         } else { 
-            const frac = new Fraction(count - int);
+            const frac = new Fraction(newCount - int);
             // console.log(`TEST: ${int} ${frac.numerator}/${frac.denominator}`);
             return `${int} ${frac.numerator}/${frac.denominator}`;
         }
@@ -26,7 +27,7 @@ const createIngredient = ingredientElement => `
         <svg class="recipe__icon">
             <use href="img/icons.svg#icon-check"></use>
         </svg>
-        <div class="recipe__count">${formantCount(ingredientElement.count)}</div>
+        <div class="recipe__count">${formatCount(ingredientElement.count)}</div>
         <div class="recipe__ingredient">
             <span class="recipe__unit">${ingredientElement.unit}</span>
             ${ingredientElement.ingredient}
@@ -41,7 +42,7 @@ export const clearResults = () => {
 }
 
 // method to displat info about recipe
-export const renderRecipe = recipe => { 
+export const renderRecipe = (recipe, isLiked) => { 
     const markup = `   
         <figure class="recipe__fig">
             <img src="${recipe.img}" alt="${recipe.title}" class="recipe__img">
@@ -80,7 +81,7 @@ export const renderRecipe = recipe => {
             </div>
             <button class="recipe__love">
                 <svg class="header__likes">
-                    <use href="img/icons.svg#icon-heart-outlined"></use>
+                    <use href="img/icons.svg#icon-heart${isLiked ? '' : '-outlined'}"></use>
                 </svg>
             </button>
         </div>
@@ -90,7 +91,7 @@ export const renderRecipe = recipe => {
               ${recipe.ingredients.map(item => createIngredient(item)).join('')}
             </ul>
 
-            <button class="btn-small recipe__btn">
+            <button class="btn-small recipe__btn recipe__btn--add">
                 <svg class="search__icon">
                     <use href="img/icons.svg#icon-shopping-cart"></use>
                 </svg>
@@ -124,6 +125,6 @@ export const updateServingsIngredients = recipe => {
     // update ingredients
     const countElements = Array.from(document.querySelectorAll(".recipe__count"));
     countElements.forEach((item, i) => { 
-        item.textContent = formantCount(recipe.ingredients[i].count);
+        item.textContent = formatCount(recipe.ingredients[i].count);
     })  
 };

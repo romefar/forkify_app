@@ -5,7 +5,10 @@ export const DOMelements = {
     searchResultList: document.querySelector('.results__list'),
     searchResults: document.querySelector('.results'),
     resultsPages: document.querySelector('.results__pages'),
-    recipeContainer: document.querySelector('.recipe')
+    recipeContainer: document.querySelector('.recipe'),
+    shoppingList: document.querySelector('.shopping__list'),
+    likesField: document.querySelector('.likes__field'),
+    likesList: document.querySelector('.likes__list')
 }
 
 export const elementStrings = { 
