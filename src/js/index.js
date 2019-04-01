@@ -7,13 +7,14 @@ import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
 import * as likesView from './views/likesView';
 import { DOMelements, renderLoader, clearLoader} from './views/base';
+
 // Global state (data) of our app
 // - Search object
 // - Current recipe object
 // - shopping list object
 // - Liked recipes 
 const state = {};
-window.state = state;
+
 /*
     SEARCH CONTROLLER
 */
@@ -38,7 +39,7 @@ const controlSearch = async () => {
             // 5. Render results on UI
             clearLoader();
             searchView.renderResults(state.search.recipes);
-            console.log(state.search.recipes);
+            //console.log(state.search.recipes);
         } catch (error) {
             console.log(`Error. Something went wrong. Message: ${error}`);
             clearLoader();
@@ -97,7 +98,7 @@ const controlRecipe = async () => {
  
             // 6. Render results on UI
             clearLoader();
-            recipeView.renderRecipe(state.recipe, state.likes.likes.isLiked(id));
+            recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
 
         } catch (error) {
             console.log(`Error. Something went wrong. Message: ${error}`);
@@ -127,7 +128,7 @@ const controlShoppingList = () => {
             listView.renderItem(uiItem);
         });
 
-        console.log(state.list.items);
+        //console.log(state.list.items);
 
     } catch (error) {
         console.log(`Error. Something went wrong. Message: ${error}`);
@@ -137,9 +138,7 @@ const controlShoppingList = () => {
 /*
     LIKES LIST CONTROLLER
 */
-// TESTT
-state.likes = new Likes();
-//likesView.toggleLikeBtn(state.likes.getNumberOfLikes());
+
 const controlLikes = () => { 
 
     try {
@@ -156,7 +155,7 @@ const controlLikes = () => {
         if(!state.likes.isLiked(currentId)) { 
         
             // add like to the state
-            const newLike = state.list.addItem(currentId, state.recipe.title, state.recipe.author, state.recipe.img);
+            const newLike = state.likes.addItem(currentId, state.recipe.title, state.recipe.author, state.recipe.img);
             
             // toogle the liek button
             likesView.toggleLikeBtn(true);
@@ -166,7 +165,7 @@ const controlLikes = () => {
         // user has LIKED recipe
         } else {
             // remove like to the state
-            const delLike = state.list.deleteItem(currentId);
+            const delLike = state.likes.deleteItem(currentId);
             
             // toogle the liek button
             likesView.toggleLikeBtn(false);
@@ -174,13 +173,16 @@ const controlLikes = () => {
             likesView.deleteLike(currentId);
         }
 
-        likesView.toggleLikeBtn(state.likes.getNumberOfLikes());
+        likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
 
 
     } catch (error) {
         console.log(`Error. Something went wrong. Message: ${error}`);
     }        
 };
+
+
+// likesView.toggleLikeBtn(state.likes.getNumberOfLikes());
 
 // delete shopping item handle 
 DOMelements.shoppingList.addEventListener('click', e => { 
@@ -204,6 +206,19 @@ DOMelements.shoppingList.addEventListener('click', e => {
 // hashchange event fired every time, when the URL's hash has changed
 window.addEventListener('hashchange', controlRecipe);
 //window.addEventListener('load', controlRecipe);
+
+// resote likes 
+window.addEventListener('load', () => { 
+    state.likes = new Likes();
+
+    // resore likes
+    state.likes.readDataFromStorage();
+    
+    // resore like menu
+    likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
+
+    state.likes.likes.forEach(item => likesView.renderLike(item));
+});
 
 DOMelements.recipeContainer.addEventListener('click', e => { 
     if(e.target.matches('.btn-decrease, .btn-decrease *')) { 
