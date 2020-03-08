@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {key, proxy} from '../config'
 export default class { 
     constructor(id) { 
         this.id = id;
@@ -7,7 +6,7 @@ export default class {
 
     async getRecipe() { 
         try {
-            const result = await axios(`${proxy}https://www.food2fork.com/api/get?key=${key}&rId=${this.id}`);
+            const result = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
             this.title = result.data.recipe.title;
             this.author = result.data.recipe.publisher;
             this.img = result.data.recipe.image_url;
