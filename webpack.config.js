@@ -2,6 +2,7 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 /* in webpack we have 6 core concepts: 
     - entry point (string)
     - output (object)
@@ -28,7 +29,11 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: "index.html",
             template: "./src/index.html"
-        })
+        }),
+        new CopyPlugin([
+            { from: './src/css/', to: 'css/' },
+            { from: './src/img/', to: 'img/' }
+        ])
     ],
     module: {
         rules: [
