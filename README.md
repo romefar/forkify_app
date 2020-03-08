@@ -1,4 +1,11 @@
 # forkify_app
-Simple food recipe app from Udemy's cource: https://www.udemy.com/the-complete-javascript-course/
+Simple food recipe app. It helps to find and get full recipe of any type of food that can be found at https://www.food2fork.com.
 
-Using HTML/CSS/native JS/Babel/Webpack and powered by https://www.food2fork.com API.
+## Used technologies: 
+- HTML 
+- CSS
+- pure JavaScript
+- Webpack
+- Babel
+
+Based on MVC pattern. 
